@@ -1,0 +1,32 @@
+{
+	"pages": [{
+		"path": "pages/index/index",
+		"style": {
+			"navigationBarTitleText": "收支"
+		}
+	}, {
+		"path": "pages/details/details",
+		"style": {
+			"navigationBarTitleText": "明细"
+		}
+	}],
+	"tabBar": {
+		"list": [{
+			"pagePath": "pages/index/index",
+			"text": "收支",
+			"iconPath": "static/icon/index.png",
+			"selectedIconPath": "static/icon/index-active.png"
+		}, {
+			"pagePath": "pages/details/details",
+			"text": "明细",
+			"iconPath": "static/icon/details.png",
+			"selectedIconPath": "static/icon/details-active.png"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "言己账本",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
+	}
+}
