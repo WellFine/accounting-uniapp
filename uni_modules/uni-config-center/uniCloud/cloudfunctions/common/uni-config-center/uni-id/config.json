@@ -1,0 +1,44 @@
+{
+  "passwordSecret": "account-password-secret",
+  "tokenSecret": "account-token-secret",
+  "tokenExpiresIn": 86400,
+  "tokenExpiresThreshold": 600,
+  "bindTokenToDevice": false,
+  "passwordErrorLimit": 6,
+  "passwordErrorRetryTime": 60,
+  "autoSetInviteCode": false,
+  "forceInviteCode": false,
+  "removePermissionAndRoleFromToken": false,
+  "mp-weixin": {
+    "tokenExpiresIn": 259200,
+    "oauth": {
+      "weixin": {
+        "appid": "wxdbde6bfe82211950",
+        "appsecret": "ee971bcdd9c9ce232971ff10515a4012"
+      }
+    }
+  },
+  "mp-alipay": {
+    "tokenExpiresIn": 259200,
+    "oauth": {
+      "alipay": {
+        "appid": "alipay appid",
+        "privateKey": "alipay privateKey", 
+        "keyType": "PKCS8"
+      }
+    }
+  },
+  "service": {
+    "sms": {
+      "name": "your app name",
+      "codeExpiresIn": 180,
+      "smsKey": "your sms key",
+      "smsSecret": "your sms secret"
+    },
+    "univerify": {
+      "appid": "your appid", 
+      "apiKey": "your apiKey",
+      "apiSecret": "your apiSecret"
+    }
+  }
+}
