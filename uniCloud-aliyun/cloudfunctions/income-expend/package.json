@@ -1,0 +1,7 @@
+{
+  "name": "income-expend",
+  "dependencies": {
+    "uni-id": "file:../../../uni_modules/uni-id/uniCloud/cloudfunctions/common/uni-id"
+  },
+  "extensions": {}
+}
