@@ -1,14 +1,22 @@
 <script>
 	export default {
-		onLaunch: function() {
-			console.warn('当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！')
-			console.log('App Launch')
+		onLaunch: function () {
+			uni.checkSession({
+				success: () => {
+					this.globalData.isLogin = true
+				},
+				fail: () => {
+					this.globalData.isLogin = false
+					uni.showToast({
+						icon: "none",
+						title: '登录后体验更多功能',
+						duration: 2000
+					})
+				}
+			})
 		},
-		onShow: function() {
-			console.log('App Show')
-		},
-		onHide: function() {
-			console.log('App Hide')
+		globalData: {
+			isLogin: false
 		}
 	}
 </script>
