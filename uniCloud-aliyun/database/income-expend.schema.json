@@ -1,0 +1,54 @@
+{
+	"bsonType": "object",
+	"description": "收入与支出表",
+	"required": [],
+	"permission": {
+		"read": "auth.uid == doc.uid",
+		"create": "auth.uid == doc.uid",
+		"update": "auth.uid == doc.uid",
+		"delete": "auth.uid == doc.uid"
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"uid": {
+			"bsonType": "string",
+			"description": "用户 ID"
+		},
+		"account": {
+			"bsonType": "string",
+			"description": "收入或支出的账户",
+			"enum": ["wechat", "alipay", "bank", "cash"]
+		},
+		"money": {
+			"bsonType": "int",
+			"description": "金额，单位为分"
+		},
+		"name": {
+			"bsonType": "string",
+			"description": "收入或支出的分类名称"
+		},
+		"subname": {
+			"bsonType": "string",
+			"description": "收入或支出分类的子分类名称"
+		},
+		"type": {
+			"bsonType": "int",
+			"description": "0 支出，1 收入，2 不计入收支记录",
+			"enum": [0, 1, 2]
+		},
+		"py": {
+			"bsonType": "string",
+			"description": "分类名称拼音，用于图片"
+		},
+		"time": {
+			"bsonType": "timestamp",
+			"description": "记录时的时间"
+		},
+		"remark": {
+			"bsonType": "string",
+			"description": "备注"
+		}
+	}
+}
