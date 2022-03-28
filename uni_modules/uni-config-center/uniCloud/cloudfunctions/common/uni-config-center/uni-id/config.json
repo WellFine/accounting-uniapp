@@ -13,8 +13,8 @@
     "tokenExpiresIn": 259200,
     "oauth": {
       "weixin": {
-        "appid": "wxdbde6bfe82211950",
-        "appsecret": "ee971bcdd9c9ce232971ff10515a4012"
+        "appid": "微信小程序的appid",
+        "appsecret": "微信小程序的appsecret"
       }
     }
   },
@@ -22,8 +22,8 @@
     "tokenExpiresIn": 259200,
     "oauth": {
       "alipay": {
-        "appid": "alipay appid",
-        "privateKey": "alipay privateKey", 
+        "appid": "支付宝小程序的appid",
+        "privateKey": "支付宝小程序的privateKey", 
         "keyType": "PKCS8"
       }
     }
