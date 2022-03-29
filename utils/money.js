@@ -27,6 +27,15 @@ function makeMoneyTrue (money) {
 	return money
 }
 
+/**
+ * 将传入金额的单位从分转为元，转换为带小数点形式
+ * @param {number} money 金额
+ */
+function fixedMoney (money) {
+	return Number(money / 100).toFixed(2)
+}
+
 export {
-	makeMoneyTrue
+	makeMoneyTrue,
+	fixedMoney
 }
