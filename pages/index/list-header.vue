@@ -5,6 +5,7 @@
 				{{ timeStr }}
 			</picker>
 		</view>
+		<loading v-if="loading" type="circle" width="50rpx" height="50rpx"></loading>
 		<view class="type">
 			<uni-data-picker popup-title="请选择类型" :localdata="typeList" v-model="typeValue" @change="changeType"></uni-data-picker>
 		</view>
@@ -15,7 +16,15 @@
 	import { getYMDTime, getTimestamp } from '/utils/date.js'
 	import { expendType, incomeType, otherType } from '/config/type.js'
 
+	import Loading from '/components/loading.vue'
+
 	export default {
+		components: {
+			Loading
+		},
+		props: {
+			loading: Boolean
+		},
 		data () {
 			return {
 				beginTime: 0,
