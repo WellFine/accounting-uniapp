@@ -1,0 +1,39 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": "auth.uid == doc.uid",
+		"create": true,
+		"update": "auth.uid == doc.uid",
+		"delete": "auth.uid == doc.uid"
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"uid": {
+			"bsonType": "string",
+			"description": "用户 ID"
+		},
+		"wechat": {
+			"bsonType": "int",
+			"description": "微信账户余额"
+		},
+		"alipay": {
+			"bsonType": "int",
+			"description": "支付宝账户余额"
+		},
+		"bank": {
+			"bsonType": "int",
+			"description": "银行账户余额"
+		},
+		"cash": {
+			"bsonType": "int",
+			"description": "现金余额"
+		},
+		"canUseMoney": {
+			"bsonType": "int",
+			"description": "每月可开销额度"
+		}
+	}
+}
