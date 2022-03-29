@@ -1,22 +1,29 @@
 <template>
-	<!-- <card />
-	<income-expend />
-	<can-use-money /> -->
+	<unicloud-db
+		v-slot:default="{ data, loading, error }" collection="account"
+		where="uid==$cloudEnv_uid" :getone="true"
+	>
+		<view v-if="error">{{error.message}}</view>
+		<view v-else>
+			<card :loading="loading" :data="data" />
+			<can-use-money :useMoney="data && data.canUseMoney" :expendMoney="monthTotalExpend" :loading="loading" />
+		</view>
+	</unicloud-db>
 	<unicloud-db
 		v-slot:default="{ data, loading, error }"
 		collection="income-expend"
 		:where="where" orderby="time desc"
 		groupby="time" group-field="push(type,name,py,subname,remark,money) as data"
+		@load="loadIncomeExpendData"
 	>
 		<view v-if="error">{{error.message}}</view>
-		<!-- <view v-else-if="loading">
-			加载动画
-		</view> -->
 		<view v-else>
-			<list-header @time="getTime" @type="getType"></list-header>
-			<template v-for="item in data" :key="item._id">
+			<income-expend :income="monthTotalIncome" :expend="monthTotalExpend" />
+			<list-header :loading="loading" @time="getTime" @type="getType"></list-header>
+			<template v-if="data.length > 0" v-for="item in data" :key="item._id">
 				<list-item :data="item"></list-item>
 			</template>
+			<view v-else class="no-data">暂无收支记录</view>
 		</view>
 	</unicloud-db>
 </template>
@@ -43,7 +50,10 @@
 				beginTime: 0,
 				endTime: 0,
 				type: 3, // 3 为全部类型
-				typeName: ''
+				typeName: '',
+				monthTotalIncome: 0,
+				monthTotalExpend: 0,
+				count: 0 // 加载 income-expend 表数据时用于保存本月收支的标识
 			}
 		},
 		computed: {
@@ -66,11 +76,32 @@
 				} else {
 					this.typeName = typeName
 				}
+			},
+			loadIncomeExpendData (data) {
+				// 这个方法用于记录下本月的收支总额
+				if (this.count === 0) {					
+					let income = 0, expend = 0
+					
+					for (const day of data) {
+						for (const item of day.data) {
+							if (item.type === 0) expend += item.money
+							else if (item.type === 1) income += item.money
+						}
+					}
+					
+					this.count++
+					this.monthTotalIncome = income
+					this.monthTotalExpend = expend
+				}
 			}
 		}
 	}
 </script>
 
 <style>
-	
+	.no-data {
+		text-align: center;
+		color: var(--normal-color);
+		margin-top: 20rpx;
+	}
 </style>

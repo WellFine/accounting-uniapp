@@ -1,58 +1,54 @@
 <template>
 	<view class="container">
-		<view class="title">本月支出与收入对比图</view>
+		<view class="title">本月收入与支出对比图</view>
 		<qiun-data-charts
-			type="bar"
-			:chartData="chartData"
-			:opts="options"
-			:canvas2d="true"
-			background="none"
+			type="bar" :canvas2d="true" canvasId="index-bar-canvas-id"
+			:chartData="chartData" :opts="options"
 		/>
 	</view>
 </template>
 
 <script>
+	import { fixedMoney } from '/utils/money.js'
+
 	export default {
-		data() {
+		props: {
+			income: Number,
+			expend: Number
+		},
+		data () {
 			return {
 				options: {
+					padding: [10, 50, 0, 5],
 					xAxis: {
 						// 关闭 x 轴
 						disabled: true,
 						// 关闭 x 轴刻度线
-					  disableGrid: true,
+					  disableGrid: true
 					},
-					yAxis: {
-						// 关闭 y 轴
-						disabled: true,
+					legend: {
+						// 关闭下方图例显示
+						show: false
 					},
 					extra: {
 						bar: {
-							// 柱子间距离
-							seriesGap: 5,
-							// 结尾圆弧
-							barBorderCircle: true,
 							// 柱子渐变色
 							linearType: 'custom',
 						}
 					}
-				},
-				chartData: {}
+				}
 			}
 		},
-		onLoad () {
-			setTimeout(() => {
-				this.chartData = {
-					categories: [''],
+		computed: {
+			chartData () {
+				return {
+					categories: ['收入', '支出'],
 					series: [{
-						name: '支出',
-						data: [100]
-					}, {
-						name: '收入',
-						data: [200]
+						name: '金额',
+						data: [Number(fixedMoney(this.income)), Number(fixedMoney(this.expend))]
 					}]
 				}
-			}, 100)
+			}
 		}
 	}
 </script>
@@ -61,7 +57,7 @@
 	.container {
 		width: 100%;
 		height: 300rpx;
-		margin: 50rpx 0;
+		margin: 20rpx 0 60rpx 0;
 		
 		.title {
 			text-align: center;

@@ -1,76 +1,88 @@
 <template>
 	<view class="container">
-		<view class="money">
-			<view class="info">
-				<text>本月可支配金额</text>
-				<text>￥{{useMoney}}</text>
+		<template v-if="!loading">
+			<view class="money" @click="goToAccountPage">
+				<view class="info">
+					<text>本月可支配金额</text>
+					<text>￥{{ fixedMoney(useMoney) }}</text>
+				</view>
+				<view class="info">
+					<text v-if="leftoverMoney >= 0">本月剩余可支配金额</text>
+					<text v-else>本月已超支</text>
+					<text>￥{{ fixedMoney(leftoverMoney) }}</text>
+				</view>
 			</view>
-			<view class="info">
-				<text>本月可支配金额</text>
-				<text>￥{{leftoverMoney}}</text>
+			<view class="charts-box">
+				<qiun-data-charts
+					type="arcbar" :canvas2d="true" canvasId="index-arcbar-canvas-id"
+					:chartData="chartData" :opts="options"
+				/>
 			</view>
-		</view>
-		<view class="charts-box">
-			<qiun-data-charts
-			  type="arcbar"
-			  :chartData="chartData"
-				:opts="options"
-			  background="none"
-			/>
-		</view>
+		</template>
+		<loading v-else type="circle"></loading>
 	</view>
 </template>
 
 <script>
+	import Loading from '/components/loading.vue'
+	import { fixedMoney } from '/utils/money.js'
+
 	export default {
+		components: {
+			Loading
+		},
 		props: {
 			useMoney: {
 				type: String,
 				default: '0.00'
 			},
-			leftoverMoney: {
+			expendMoney: {
 				type: String,
 				default: '0.00'
-			}
+			},
+			loading: Boolean
 		},
-		data () {
-			return {
-				options: {},
-				chartData: {}
-			}
-		},
-		onLoad () {
-			this.options = {
-				title: {
-					name: '数值',
-					fontSize: 36,
-					color: this.getColor(0.9),
-					// 上移中间字体
-					offsetY: -8,
-				},
-				subtitle: {
-					// 设置副标题为空
-					name: '',
+		computed: {
+			leftoverMoney () {
+				return this.useMoney - this.expendMoney
+			},
+			ratio () {
+				const res = this.leftoverMoney / this.useMoney
+				return res >= 0 ? res : 0
+			},
+			options () {
+				return {
+					title: {
+						name: `${this.ratio.toFixed(4) * 100}%`,
+						fontSize: 32,
+						color: this.getColor(this.ratio),
+						// 上移中间字体
+						offsetY: -8,
+					},
+					subtitle: {
+						// 设置副标题为空
+						name: '',
+					}
 				}
-			}
-			this.chartData = {
-				series: [{
-					data: 0.8,
-					color: this.getColor(0.9)
-				}]
+			},
+			chartData () {
+				return {
+					series: [{
+						data: this.ratio,
+						color: this.getColor(this.ratio)
+					}]
+				}
 			}
 		},
 		methods: {
+			fixedMoney,
+			goToAccountPage () {
+				uni.navigateTo({
+					url: '/pages/account/account'
+				})
+			},
 			getColor (value) {
 				return value < 0.3 ? '#f5222d' : (value < 0.6 ? '#ffc53d' : '#73d13d')
-				// switch (type) {
-				// 	case 'background':
-				// 		return value < 0.3 ? '#fdc4c8' : (value < 0.6 ? '#fff1d0' : '#d3f1c2')
-				// 	case 'wave':
-				// 		return value < 0.3 ? '#f5222d' : (value < 0.6 ? '#ffc53d' : '#73d13d')
-				// 	case 'text':
-				// 		return value < 0.3 ? '#f5222d' : (value < 0.6 ? 'rgb(51,160,141)' : '#69c0ff')
-				// }
 			}
 		}
 	}
@@ -78,9 +90,12 @@
 
 <style lang="scss">
 	.container {
+		width: 100%;
+		height: 300rpx;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
+		margin-top: 40rpx;
 		
 		.money {
 			.info {
