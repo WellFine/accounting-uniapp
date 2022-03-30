@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="header">
-			<text class="time">{{ time }}</text>
+			<text class="time">{{ timeStr }}</text>
 			<view class="income-expend">
 				<view class="income" v-if="totalIncome > 0">
 					<text class="icon">+</text>
@@ -15,7 +15,7 @@
 		</view>
 		<view class="info-list">
 			<template v-for="(item, index) in data.data" :key="index">
-				<view class="info-item">
+				<view class="info-item" @click="clickItem(item)">
 					<view class="left-info">
 						<type-icon :type="item.py"></type-icon>
 						<view class="details">
@@ -49,6 +49,7 @@
 		data () {
 			return {
 				time: 0,
+				timeStr: '',
 				totalIncome: 0,
 				totalExpend: 0
 			}
@@ -56,14 +57,25 @@
 		created () {
 			const { time, data: list } = this.data
 			const { monthStr, dayStr } = getYMDTime(new Date(time))
-			this.time = `${monthStr}月${dayStr}日`
+			let totalExpend = 0, totalIncome = 0
+
 			for (const item of list) {
-				if (item.type === 0) this.totalExpend += item.money
-				else if (item.type === 1) this.totalIncome += item.money
+				if (item.type === 0) totalExpend += item.money
+				else if (item.type === 1) totalIncome += item.money
 			}
+
+			this.time = time
+			this.timeStr = `${monthStr}月${dayStr}日`
+			this.totalExpend = totalExpend
+			this.totalIncome = totalIncome
 		},
 		methods: {
-			fixedMoney
+			fixedMoney,
+			clickItem (data) {
+				uni.navigateTo({
+					url: `/pages/add/add?data=${JSON.stringify(data)}&&time=${this.time}`
+				})
+			}
 		}
 	}
 </script>

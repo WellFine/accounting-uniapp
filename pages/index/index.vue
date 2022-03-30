@@ -13,7 +13,7 @@
 		v-slot:default="{ data, loading, error }"
 		collection="income-expend"
 		:where="where" orderby="time desc"
-		groupby="time" group-field="push(type,name,py,subname,remark,money) as data"
+		groupby="time" group-field="push(_id,type,name,py,subname,remark,money,account) as data"
 		@load="loadIncomeExpendData"
 	>
 		<view v-if="error">{{error.message}}</view>
@@ -34,8 +34,6 @@
 	import CanUseMoney from './can-use-money.vue'
 	import ListHeader from './list-header.vue'
 	import ListItem from './list-item.vue'
-	
-	import { getTimestamp } from '/utils/date.js'
 
 	export default {
 		components: {

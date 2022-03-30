@@ -21,10 +21,9 @@
 			TypeIcon
 		},
 		props: {
-			listName: {
-				type: String,
-				required: true
-			}
+			type: Number,
+			typeName: String, // 传了 typeName 就表示想要选中类型列表中与其值对应的类型
+			subname: String // 想选中的子类型
 		},
 		data () {
 			return {
@@ -35,14 +34,42 @@
 		},
 		computed: {
 			list () {
-				return this.listName === 'expend' ? expendType :
-							 this.listName === 'income' ? incomeType :
-							 this.listName === 'other' ? otherType : null
+				return this.type === 0 ? expendType :
+							 this.type === 1 ? incomeType :
+							 this.type === 2 ? otherType : null
 			},
 			color () {
-				return this.listName === 'expend' ? '#69c0ff' :
-							 this.listName === 'income' ? '#73d13d' :
-							 this.listName === 'other' ? '#b37feb' : ''
+				return this.type === 0 ? '#69c0ff' :
+							 this.type === 1 ? '#73d13d' :
+							 this.type === 2 ? '#b37feb' : ''
+			},
+			computedIndex () {
+				if (this.typeName) {
+					for (let i = 0; i < this.list.length; i++) {
+						const item = this.list[i]
+						if (item.type === this.typeName) {
+							this.$emit('getType', {
+								type: item,
+								index: this.subname ? item.subname.indexOf(this.subname) : undefined
+							})
+							return i
+						}
+					}
+					return 0
+				} else {
+					return 0
+				}
+			}
+		},
+		watch: {
+			computedIndex (val) {
+				this.activeIndex = val
+			},
+			// 页面切换 type 时重置下标
+			type () {
+				this.$nextTick(() => {
+					this.activeIndex = 0
+				})
 			}
 		},
 		methods: {
@@ -51,7 +78,7 @@
 				
 				this.activeIndex = typeIndex
 				
-				this.$emit('getType', type)
+				this.$emit('getType', { type, index: 0 })
 			}
 		}
 	}
