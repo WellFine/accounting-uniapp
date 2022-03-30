@@ -16,6 +16,10 @@
 			fields: {
 				type: String,
 				default: 'month'
+			},
+			time: {
+				type: Number,
+				default: 0
 			}
 		},
 		data () {
@@ -26,8 +30,13 @@
 			}
 		},
 		created () {
-			const { year, monthStr, dayStr } = getYMDTime()
-			
+			const now = getYMDTime()
+			this.dateEnd = `${now.year}-${now.monthStr}-${now.dayStr}`
+		},
+		beforeMount () {
+			// 如果传入了时间参数，则以时间参数为基准，否则以当前时间为基准
+			// 在 beforeMount 执行是因为只有这时开始才能拿到 props 参数
+			const { year, monthStr, dayStr } = getYMDTime(this.time ? new Date(this.time) : undefined)
 			this._setTime(year, monthStr, dayStr)
 		},
 		methods: {
@@ -56,7 +65,6 @@
 				
 				this.date = date
 				this.dateStr = dateStr
-				this.dateEnd = date
 				
 				this.$emit('time', date)
 			}
