@@ -33,12 +33,12 @@
 		},
 		props: {
 			useMoney: {
-				type: String,
-				default: '0.00'
+				type: Number,
+				default: 0
 			},
 			expendMoney: {
-				type: String,
-				default: '0.00'
+				type: Number,
+				default: 0
 			},
 			loading: Boolean
 		},
