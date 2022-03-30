@@ -19,7 +19,7 @@
 		data () {
 			return {
 				options: {
-					padding: [10, 50, 0, 5],
+					padding: [10, 60, 0, 5],
 					xAxis: {
 						// 关闭 x 轴
 						disabled: true,
