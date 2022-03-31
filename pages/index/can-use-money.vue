@@ -53,7 +53,7 @@
 			options () {
 				return {
 					title: {
-						name: `${this.ratio.toFixed(4) * 100}%`,
+						name: `${(this.ratio * 100).toFixed(2)}%`,
 						fontSize: 32,
 						color: this.getColor(this.ratio),
 						// 上移中间字体
