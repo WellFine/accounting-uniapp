@@ -201,19 +201,24 @@
 			const handleData = ref(null)
 			const handleTime = ref(0)
 			const handleId = ref('')
-			const handleType = ref(0)
 			const handleName = ref('')
 			const handleSubname = ref('')
 			const isUpdateOrDelete = ref(false)
+			let handleType = 0	// 原来的类型，用于事务操作中同步账户数据
+			let handleMoney = 0 // 原来的金额，用于事务操作中同步账户数据
+			let handleAccount = ''	// 原来的账户，用于事务操作中同步账户数据
 			watch(handleData, value => {
 				const { _id, type: typeVal, money: moneyVal, name, subname, account: accountVal, remark: remarkVal } = value
 				isUpdateOrDelete.value = true
 				handleId.value = _id
 				type.value = typeVal
+				handleType = typeVal
 				money.value = fixedMoney(moneyVal)
+				handleMoney = moneyVal
 				handleName.value = name
 				handleSubname.value = subname
 				account.value = accountVal
+				handleAccount = accountVal
 				remark.value = remarkVal
 			})
 
@@ -231,9 +236,9 @@
 				isUpdating.value = true
 				
 				incomeExpend.update(
-					handleId.value, type.value, timeStr.value, money.value,
+					handleId.value, type.value, handleType, timeStr.value, money.value * 100, handleMoney,
 					typeObj.value.type, typeObj.value.py, typeObj.value.subname ? typeObj.value.subname[subIndex.value] : '',
-					account.value, remark.value
+					account.value, handleAccount, remark.value
 				).then(res => {
 					const { errCode, errMsg } = res
 					if (errCode === 0) {
@@ -258,7 +263,7 @@
 			const deleteFn = () => {
 				isDeleting.value = true
 				
-				incomeExpend.delete(handleId.value).then(res => {
+				incomeExpend.delete(handleId.value, handleType, handleMoney, handleAccount).then(res => {
 					const { errCode, errMsg } = res
 					if (errCode === 0) {
 						uni.reLaunch({
