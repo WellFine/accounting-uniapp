@@ -1,4 +1,5 @@
 <template>
+	<text class="hint">注意：当余额不足以扣除支出金额时会置为 0！</text>
 	<unicloud-db
 		v-slot:default="{ data, loading, error }" collection="account"
 		where="uid==$cloudEnv_uid" ref="account"
@@ -111,6 +112,10 @@
 </script>
 
 <style lang="scss">
+	.hint {
+		color: #ed6d46;
+		font-size: 24rpx;
+	}
 	.loading {
 		width: 100%;
 		height: 700rpx;
