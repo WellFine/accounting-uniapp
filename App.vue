@@ -1,4 +1,6 @@
 <script>
+	const db = uniCloud.database()
+
 	export default {
 		onLaunch: function () {
 			uni.checkSession({
@@ -14,6 +16,32 @@
 					})
 				}
 			})
+
+			// 全局处理 clientDB（unicloud-db 组件）发送请求时回传的 token 与错误事件
+			const refreshToken = ({ token, tokenExpired }) => {
+				// clientDB 发送请求后回传的 token 直接存入缓存中
+				uni.setStorageSync('uni_id_token', token)
+				uni.setStorageSync('uni_id_token_expired', tokenExpired)
+			}
+			const onDBError = ({ code, message }) => {
+				// clientDB 发送请求出错，这里判断如果是 token 过期就跳登录页
+				if (code === 'TOKEN_INVALID_TOKEN_EXPIRED') {
+					uni.showToast({
+						icon: 'none',
+						title: '登录过期，请重新登录',
+						duration: 1000,
+						success: () => {
+							setTimeout(() => {
+								uni.reLaunch({
+									url: '/pages/login/login'
+								})
+							}, 1000)
+						}
+					})
+				}
+			}
+			db.on('refreshToken', refreshToken)
+			db.on('error', onDBError)
 		},
 		globalData: {
 			isLogin: false
