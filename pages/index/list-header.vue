@@ -1,9 +1,7 @@
 <template>
 	<view class="container">
 		<view class="time">
-			<picker mode="date" fields="month" @change="changeTime">
-				{{ timeStr }}
-			</picker>
+			<picker mode="date" fields="month" :value="time" :end="timeEnd" @change="changeTime">{{ timeStr }}</picker>
 		</view>
 		<loading v-if="loading" type="circle" width="50rpx" height="50rpx"></loading>
 		<view class="type">
@@ -29,7 +27,9 @@
 			return {
 				beginTime: 0,
 				endTime: 0,
+				time: '',
 				timeStr: '',
+				timeEnd: '',
 				typeValue: '3-0', // 与 typeList 中的 value 值对应
 				typeList: [{
 					text: '全部类型',
@@ -54,6 +54,7 @@
 			// 初始化时间
 			const { year, monthStr } = getYMDTime()
 			const { beginTime, endTime } = getTimestamp()
+			this.timeEnd = `${year}-${monthStr}`
 			this._setTime(year, monthStr, beginTime, endTime)
 
 			// 初始化类型
@@ -84,7 +85,8 @@
 				this._setTime(year, monthStr, beginTime, endTime)
 			},
 			_setTime (year, monthStr, beginTime, endTime) {
-				this.timeStr = `${year} 年 ${monthStr} 月`
+				this.time = `${year}-${monthStr}`
+				this.timeStr = `${year}年${monthStr}月`
 				this.beginTime = beginTime
 				this.endTime = endTime
 				this.$emit('time', {
