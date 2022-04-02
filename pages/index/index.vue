@@ -1,9 +1,11 @@
 <template>
 	<unicloud-db
 		v-slot:default="{ data, loading, error }" collection="account"
-		where="uid==$cloudEnv_uid" :getone="true"
+		where="uid==$cloudEnv_uid" :getone="true" @error="udbError"
 	>
-		<view v-if="error">{{error.message}}</view>
+		<view v-if="error">
+			<udb-error :code="error.code"></udb-error>
+		</view>
 		<view v-else>
 			<card :loading="loading" :data="data" />
 			<can-use-money :useMoney="data && data.canUseMoney" :expendMoney="monthTotalExpend" :loading="loading" />
@@ -34,6 +36,7 @@
 	import CanUseMoney from './can-use-money.vue'
 	import ListHeader from './list-header.vue'
 	import ListItem from './list-item.vue'
+	import UdbError from '/components/udb-error.vue'
 
 	export default {
 		components: {
@@ -41,7 +44,8 @@
 			IncomeExpend,
 			CanUseMoney,
 			ListHeader,
-			ListItem
+			ListItem,
+			UdbError
 		},
 		data () {
 			return {
@@ -90,6 +94,12 @@
 					this.count++
 					this.monthTotalIncome = income
 					this.monthTotalExpend = expend
+				}
+			},
+			udbError (err) {
+				// 用户未登录，为匿名身份
+				if (err.code === 'TOKEN_INVALID_ANONYMOUS_USER') {
+					
 				}
 			}
 		}
