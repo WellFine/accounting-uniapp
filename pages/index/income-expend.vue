@@ -58,7 +58,7 @@
 		width: 100%;
 		height: 300rpx;
 		margin: 20rpx 0 60rpx 0;
-		
+
 		.title {
 			text-align: center;
 			color: #333;
