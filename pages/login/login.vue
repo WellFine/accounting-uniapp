@@ -15,12 +15,25 @@
 		<view class="link">已有微信账户？点我同步</view>
 		<!-- #endif -->
 	</view>
+	<view v-if="isLogining" class="login-loading">
+		<com-loading type="circle" width="200rpx" height="200rpx"></com-loading>
+	</view>
 </template>
 
 <script>
+	import ComLoading from '/components/loading.vue'
+
 	const login = uniCloud.importObject('login')
 
 	export default {
+		components: {
+			ComLoading
+		},
+		data () {
+			return {
+				isLogining: false
+			}
+		},
 		methods: {
 			_loginErrorToast (title = '') {
 				uni.showToast({
@@ -30,34 +43,37 @@
 				})
 			},
 			loginByWeixin () {
+				this.isLogining = true
 				uni.login({
 					provider: 'weixin',
 					onlyAuthorize: true,
 					success: async res => {
 						const { code } = res
 						const { token, tokenExpired } = await login.loginByWeixin(code)
-						this._loginErrorToast()
 						if (token) {
+							uni.setStorageSync('uni_id_token', token)
+							uni.setStorageSync('uni_id_token_expired', tokenExpired)
 							uni.showToast({
 								icon: 'none',
 								title: '登录成功',
 								duration: 1000,
 								success: () => {
 									setTimeout(() => {
-										uni.switchTab({
+										uni.reLaunch({
 											url: '/pages/index/index'
 										})
 									}, 1000)
 								}
 							})
-							uni.setStorageSync('uni_id_token', token)
-							uni.setStorageSync('uni_id_token_expired', tokenExpired)
 						} else {
 							this._loginErrorToast()
 						}
 					},
 					fail: () => {
 						this._loginErrorToast()
+					},
+					complete: () => {
+						this.isLogining = false
 					}
 				})
 			}
@@ -66,6 +82,11 @@
 </script>
 
 <style lang="scss">
+	.login-loading {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	.container {
 		.item {
 			width: 70%;
