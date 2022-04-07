@@ -4,7 +4,7 @@
 	"required": [],
 	"permission": {
 		"read": "auth.uid == doc.uid",
-		"create": "auth.uid == doc.uid",
+		"create": "true",
 		"update": "auth.uid == doc.uid",
 		"delete": "auth.uid == doc.uid"
 	},
