@@ -55,7 +55,7 @@
 		</view>
 	</unicloud-db>
 	<unicloud-db
-		v-slot:default="{ data, loading, error }" collection="income-expend"
+		v-slot:default="{ data, loading, error }" collection="income-expend" :page-size="32"
 		:where="`uid==$cloudEnv_uid&&time>=${beginTime}&&time<${endTime}&&type==${timeType}`" orderby="time asc"
 		groupby="time" group-field="sum(money) as money, push(name, subname, money) as dataList"
 		@load="loadTimeData"
@@ -108,10 +108,8 @@
 			const date = ref(`${year}-${monthStr}`)
 			const dateStr = ref(`${year}年${monthStr}月`)
 			const dateEnd = ref(`${year}-${monthStr}`)
-			// const beginTime = ref(timestamp.beginTime)
-			// const endTime = ref(timestamp.endTime)
-			const beginTime = ref(1646092800000)
-			const endTime = ref(1648771200000)
+			const beginTime = ref(timestamp.beginTime)
+			const endTime = ref(timestamp.endTime)
 			const onChangeDate = e => {
 				const time = e.detail.value
 				const [ year, month ] = time.split('-')
@@ -173,6 +171,7 @@
 			}
 			
 			const subnamePieOpts = {
+				tooltipShow: true,
 				legend: {
 					position: 'top',
 					lineHeight: 20
@@ -180,7 +179,7 @@
 				extra: {
 					rose: {
 						border: true,
-						borderWidth: 3,
+						borderWidth: 2,
 						offsetAngle: -90
 					}
 				}
@@ -283,7 +282,7 @@
 				
 				for (const item of timeData[currentIndex].dataList) {
 					arr.push({
-						name: item.subname ? item.subname : item.name,
+						name: item.name + (item.subname ? `-${item.subname}` : ''),
 						value: Number(fixedMoney(item.money))
 					})
 				}

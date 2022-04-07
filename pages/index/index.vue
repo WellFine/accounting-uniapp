@@ -1,7 +1,7 @@
 <template>
 	<unicloud-db
 		v-slot:default="{ data, loading, error }" collection="account"
-		where="uid==$cloudEnv_uid" :getone="true" @error="udbError"
+		where="uid==$cloudEnv_uid" :getone="true"
 	>
 		<view v-if="error">
 			<udb-error :code="error.code"></udb-error>
@@ -14,7 +14,7 @@
 	<unicloud-db
 		v-slot:default="{ data, loading, error }"
 		collection="income-expend"
-		:where="where" orderby="time desc"
+		:where="where" orderby="time desc" :page-size="32"
 		groupby="time" group-field="push(_id,type,name,py,subname,remark,money,account) as data"
 		@load="loadIncomeExpendData"
 	>
@@ -94,12 +94,6 @@
 					this.count++
 					this.monthTotalIncome = income
 					this.monthTotalExpend = expend
-				}
-			},
-			udbError (err) {
-				// 用户未登录，为匿名身份
-				if (err.code === 'TOKEN_INVALID_ANONYMOUS_USER') {
-					
 				}
 			}
 		}
