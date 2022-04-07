@@ -7,8 +7,16 @@
 			</view>
 			<text class="number">￥{{money}}</text>
 		</view>
-		<view class="add" @click="add">
-			<uni-icons type="plus-filled" size="50"></uni-icons>
+		<view class="operate">
+			<view class="add" @click="add">
+				<uni-icons type="plus-filled" size="26"></uni-icons>
+				<text>添加</text>
+			</view>
+			<view class="line"></view>
+			<view class="search" @click="search">
+				<uni-icons type="search" size="26"></uni-icons>
+				<text>搜索</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -35,11 +43,22 @@
 		},
 		methods: {
 			add () {
+				this._navigate('/pages/add/add')
+			},
+			search () {
+				this._navigate('/pages/search/search')
+			},
+			goToAccountPage () {
+				uni.navigateTo({
+					url: '/pages/account/account'
+				})
+			},
+			_navigate (url) {
 				const { isLogin } = getApp().globalData
-
+				
 				if (isLogin) {
 					uni.navigateTo({
-						url: '/pages/add/add'
+						url
 					})
 				} else {
 					uni.showToast({
@@ -55,11 +74,6 @@
 						}
 					})
 				}
-			},
-			goToAccountPage () {
-				uni.navigateTo({
-					url: '/pages/account/account'
-				})
 			}
 		}
 	}
@@ -67,17 +81,16 @@
 
 <style lang="scss">
 	.container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 		background: #fde65e;
 		color: #3c3044;
 		border-radius: 20rpx;
-		padding: 30rpx 20rpx;
+		padding: 30rpx 20rpx 18rpx;
 		
 		.money {
 			display: flex;
 			flex-direction: column;
+			padding-bottom: 10rpx;
+			border-bottom: 2rpx solid #e8c600;
 			.title {
 				display: flex;
 				align-items: center;
@@ -89,6 +102,27 @@
 			.number {
 				font-size: 60rpx;
 				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+		
+		.operate {
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+			margin-top: 10rpx;
+			.add,
+			.search {
+				display: flex;
+				align-items: center;
+				vertical-align: middle;
+			}
+			.line {
+				width: 4rpx;
+				height: 40rpx;
+				background-color: #e8c600;
 			}
 		}
 	}
