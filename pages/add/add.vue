@@ -278,7 +278,7 @@
 				}).catch(err => {
 					uni.showToast({
 						icon: 'none',
-						title: errMsg
+						title: err.message || '出错了，请稍后重试'
 					})
 				}).finally(() => {
 					isDeleting.value = false
