@@ -111,7 +111,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.hint {
 		color: #ed6d46;
 		font-size: 24rpx;
@@ -162,5 +162,9 @@
 		width: 60%;
 		color: #eb2f96;
 		background: #ffd6e7;
+		/* #ifdef MP-ALIPAY */
+		margin-left: 50%;
+		transform: translateX(-50%);
+		/* #endif */
 	}
 </style>

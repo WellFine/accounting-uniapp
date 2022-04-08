@@ -323,7 +323,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		box-sizing: border-box;
 		padding: 10rpx 30rpx 20rpx;
@@ -416,6 +416,12 @@
 			font-size: 28rpx;
 			color: #fff;
 		}
+		/* #ifdef MP-ALIPAY */
+		/* 支付宝小程序中 text 内容会换行，这里强制不换行 */
+		text {
+			white-space: nowrap;
+		}
+		/* #endif */
 		
 		.wechat {
 		  background: #52c41a;

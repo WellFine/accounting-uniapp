@@ -2,7 +2,8 @@
 	const db = uniCloud.database()
 
 	export default {
-		onLaunch: function () {
+		onLaunch: async function () {
+			// #ifdef MP-WEIXIN
 			uni.checkSession({
 				success: () => {
 					this.globalData.isLogin = true
@@ -16,6 +17,7 @@
 					})
 				}
 			})
+			// #endif
 
 			// 全局处理 clientDB（unicloud-db 组件）发送请求时回传的 token 与错误事件
 			const refreshToken = ({ token, tokenExpired }) => {
@@ -64,5 +66,17 @@
 		--other-background: #efdbff;
 		box-sizing: border-box;
 		padding: 0 50rpx 20rpx;
+		
+		/* #ifdef MP-ALIPAY */
+		// 支付宝小程序 input 输入框背景为白色，这里改成透明色
+		input {
+			background: transparent;
+		}
+		// 支付宝小程序 button 按钮长度根据内容而变化，这里统一设置
+		// button {
+		// 	width: 100%;
+		// 	border-radius: 10rpx;
+		// }
+		/* #endif */
 	}
 </style>

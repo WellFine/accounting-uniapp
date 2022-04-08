@@ -37,6 +37,7 @@
 	import ListHeader from './list-header.vue'
 	import ListItem from './list-item.vue'
 	import UdbError from '/components/udb-error.vue'
+	import { getTimestamp } from '/utils/date.js'
 
 	export default {
 		components: {
@@ -60,7 +61,9 @@
 		},
 		computed: {
 			where () {
-				return `uid==$cloudEnv_uid&&time>=${this.beginTime}&&time<${this.endTime}`
+				// 判断 this.beginTime 与 this.endTime 是否等于 0 是为了兼容支付宝在刚进入时这两个值为 0 的情况
+				const { beginTime, endTime } = getTimestamp()
+				return `uid==$cloudEnv_uid&&time>=${this.beginTime == 0 ? beginTime : this.beginTime}&&time<${this.endTime == 0 ? endTime : this.endTime}`
 							 + (this.type === 3 ? '' : `&&type==${this.type}`)
 							 + (this.typeName ? `&&name=='${this.typeName}'` : '')
 			}
@@ -81,7 +84,7 @@
 			},
 			loadIncomeExpendData (data) {
 				// 这个方法用于记录下本月的收支总额
-				if (this.count === 0) {					
+				if (this.count === 0) {
 					let income = 0, expend = 0
 					
 					for (const day of data) {
@@ -100,7 +103,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.no-data {
 		text-align: center;
 		color: var(--normal-color);

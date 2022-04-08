@@ -17,7 +17,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		width: 72rpx;
 		height: 72rpx;

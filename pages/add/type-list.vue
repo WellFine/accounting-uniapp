@@ -84,7 +84,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.list {
 		display: grid;
 		grid-template-columns: repeat(7, 14.28%);

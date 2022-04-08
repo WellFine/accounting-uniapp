@@ -30,14 +30,16 @@
 			}
 		},
 		created () {
-			const now = getYMDTime()
-			this.dateEnd = `${now.year}-${now.monthStr}-${now.dayStr}`
-		},
-		beforeMount () {
-			// 如果传入了时间参数，则以时间参数为基准，否则以当前时间为基准
-			// 在 beforeMount 执行是因为只有这时开始才能拿到 props 参数
-			const { year, monthStr, dayStr } = getYMDTime(this.time ? new Date(this.time) : undefined)
+			const { year, monthStr, dayStr } = getYMDTime()
 			this._setTime(year, monthStr, dayStr)
+			this.dateEnd = `${year}-${monthStr}-${dayStr}`
+		},
+		watch: {
+			time (val) {
+				// 如果传入了时间参数，则以时间参数为基准
+				const { year, monthStr, dayStr } = getYMDTime(new Date(val))
+				this._setTime(year, monthStr, dayStr, true)
+			}
 		},
 		methods: {
 			changeTime (time) {
@@ -72,7 +74,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.time {
 		font-size: 24rpx;
 		background: var(--normal-background);

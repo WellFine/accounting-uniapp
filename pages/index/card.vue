@@ -35,10 +35,10 @@
 		},
 		computed: {
 			money () {
-				if (this.data) {					
+				if (this.data) {
 					const { wechat, alipay, bank, cash } = this.data
 					return fixedMoney(wechat + alipay + bank + cash)
-				}
+				} else return '0.00'
 			}
 		},
 		methods: {
@@ -54,13 +54,9 @@
 				})
 			},
 			_navigate (url) {
+				// #ifdef MP-WEIXIN
 				const { isLogin } = getApp().globalData
-				
-				if (isLogin) {
-					uni.navigateTo({
-						url
-					})
-				} else {
+				if (!isLogin) {
 					uni.showToast({
 						icon: 'none',
 						title: '请先登录',
@@ -73,13 +69,19 @@
 							}, 1000)
 						}
 					})
+					return
 				}
+				// #endif
+
+				uni.navigateTo({
+					url
+				})
 			}
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		background: #fde65e;
 		color: #3c3044;

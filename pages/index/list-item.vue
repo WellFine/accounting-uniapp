@@ -80,7 +80,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		box-shadow: 0 0 10rpx 5rpx rgba(94, 73, 73, 0.1);
 		border-radius: 20rpx;

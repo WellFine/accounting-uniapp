@@ -28,50 +28,54 @@
 		</uni-card>
 	</view>
 	<uni-transition :mode-class="['fade', 'slide-left']" :show="!isShowSearchResult" :duration="300">
-		<uni-card class="history" title="历史记录" extra="清空历史记录" :isFull="true" @click="onClickHistoryCard">
-			<view v-if="keywordList.length === 0" class="no-history">暂无历史记录</view>
-			<view v-else class="history-list">
-				<template v-for="(item, index) in keywordList" :key="index">
-					<view class="history-item">
-						<uni-icons type="link" :size="24"></uni-icons>
-						<text class="content" @click="onSearch(item)">{{ item }}</text>
-						<uni-icons type="clear" :size="20" color="#c0c4cc" @click="onDeleteHistoryItem(index)"></uni-icons>
-					</view>
-				</template>
-			</view>
-		</uni-card>
+		<view class="history">
+			<uni-card title="历史记录" extra="清空历史记录" :isFull="true" @click="onClickHistoryCard">
+				<view v-if="keywordList.length === 0" class="no-history">暂无历史记录</view>
+				<view v-else class="history-list">
+					<template v-for="(item, index) in keywordList" :key="index">
+						<view class="history-item">
+							<uni-icons type="link" :size="24"></uni-icons>
+							<text class="content" @click="onSearch(item)">{{ item }}</text>
+							<uni-icons type="clear" :size="20" color="#c0c4cc" @click="onDeleteHistoryItem(index)"></uni-icons>
+						</view>
+					</template>
+				</view>
+			</uni-card>
+		</view>
 	</uni-transition>
 	<unicloud-db
-		class="udb" ref="udb" v-slot:default="{ data, loading, error, hasMore, pagination }" collection="income-expend"
+		ref="udb" v-slot:default="{ data, loading, error, hasMore, pagination }" collection="income-expend"
 		:where="where" loadtime="manual" orderby="time desc"
 	>
 		<uni-transition :mode-class="['fade', 'slide-bottom']" :show="isShowSearchResult" :duration="300">
-			<uni-card title="搜索结果" extra="返回历史记录" :isFull="true" @click="onClickSearchResultCard">
-				<view v-if="error">
-					<udb-error :code="error.code"></udb-error>
-				</view>
-				<view v-else-if="loading" class="loading">
-					<com-loading></com-loading>
-				</view>
-				<view v-else>
-					<view v-if="data.length > 0" class="search-result-list">
-						<template v-for="item in data" :key="item._id">
-							<view class="search-result-item" @click="onClickSearchResultItem(item)">
-								<view class="left">
-									<view class="name">{{ `${item.name} ${item.subname ? item.subname : ''}` }}</view>
-									<view class="remark">{{ item.remark }}</view>
-								</view>
-								<view class="right">
-									<view class="time">{{ getDateStr(item.time) }}</view>
-									<view class="money">{{ item.type === 0 ? '-' : (item.type === 1 ? '+' : '') }}￥{{ fixedMoney(item.money) }}</view>
-								</view>
-							</view>
-						</template>
-						<view v-if="hasMore" class="load-more" @click="onClickLoadMore">加载更多数据</view>
+			<view class="udb">
+				<uni-card title="搜索结果" extra="返回历史记录" :isFull="true" @click="onClickSearchResultCard">
+					<view v-if="error">
+						<udb-error :code="error.code"></udb-error>
 					</view>
-					<view v-else class="no-search-result">找不到有关{{keyword}}的记录</view>
-				</view>
-			</uni-card>
+					<view v-else-if="loading" class="loading">
+						<com-loading></com-loading>
+					</view>
+					<view v-else>
+						<view v-if="data.length > 0" class="search-result-list">
+							<template v-for="item in data" :key="item._id">
+								<view class="search-result-item" @click="onClickSearchResultItem(item)">
+									<view class="left">
+										<view class="name">{{ `${item.name} ${item.subname ? item.subname : ''}` }}</view>
+										<view class="remark">{{ item.remark }}</view>
+									</view>
+									<view class="right">
+										<view class="time">{{ getDateStr(item.time) }}</view>
+										<view class="money">{{ item.type === 0 ? '-' : (item.type === 1 ? '+' : '') }}￥{{ fixedMoney(item.money) }}</view>
+									</view>
+								</view>
+							</template>
+							<view v-if="hasMore" class="load-more" @click="onClickLoadMore">加载更多数据</view>
+						</view>
+						<view v-else class="no-search-result">找不到有关{{keyword}}的记录</view>
+					</view>
+				</uni-card>
+			</view>
 		</uni-transition>
 	</unicloud-db>
 </template>
@@ -210,7 +214,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		background: #f9fafe;
 		.search-input {

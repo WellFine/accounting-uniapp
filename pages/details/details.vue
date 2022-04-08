@@ -1,5 +1,9 @@
 <template>
-	<picker class="time-picker" mode="date" fields="month" :value="date" :end="dateEnd" @change="onChangeDate">{{dateStr}}</picker>
+	<view class="time-picker">
+		<picker mode="date" fields="month" :value="date" :end="dateEnd" @change="onChangeDate">
+			<view>{{ dateStr }}</view>
+		</picker>
+	</view>
 	<unicloud-db
 		v-slot:default="{ data, loading, error }" collection="income-expend"
 		:where="`uid==$cloudEnv_uid&&time>=${beginTime}&&time<${endTime}`"
@@ -329,7 +333,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.time-picker {
 		display: inline-block;
 		position: sticky;

@@ -1,7 +1,9 @@
 <template>
 	<view class="container">
 		<view class="time">
-			<picker mode="date" fields="month" :value="time" :end="timeEnd" @change="changeTime">{{ timeStr }}</picker>
+			<picker mode="date" fields="month" :value="time" :end="timeEnd" @change="changeTime">
+				<view>{{ timeStr }}</view>
+			</picker>
 		</view>
 		<loading v-if="loading" type="circle" width="50rpx" height="50rpx"></loading>
 		<view class="type">
@@ -97,15 +99,15 @@
 			changeType (e) {
 				const [ type, typeName ] = e.detail.value
 				this.$emit('type', {
-					type: Number(type.value[0]), // type 取第一个字符转数字供外部使用
-					typeName: typeName.text
+					type: type ? Number(type.value[0]) : 3, // type 取第一个字符转数字供外部使用
+					typeName: typeName ? typeName.text : ''
 				})
 			}
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		width: 100%;
 		box-sizing: border-box;
