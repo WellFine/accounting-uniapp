@@ -22,7 +22,7 @@ module.exports = {
 				errMsg: '用户信息错误'
 			}
 		}
-		
+
 		// 开启事务
 		const transaction = await db.startTransaction()
 
@@ -59,7 +59,7 @@ module.exports = {
 								[`${account}`]: type == 0 ? (changeMoney >= accountValue ? 0 : dbCmd.inc(-changeMoney)) : dbCmd.inc(changeMoney)
 							})
 
-							transaction.commit()
+							await transaction.commit()
 							return {
 								errCode: 0,
 								errMsg: '已入账',
@@ -67,7 +67,7 @@ module.exports = {
 								tokenExpired
 							}
 						} catch (e) {
-							transaction.rollback()
+							await transaction.rollback()
 							return {
 								errCode: 11004,
 								errMsg: '同步账户数据失败，请稍后重试'
@@ -77,7 +77,7 @@ module.exports = {
 				}
 				
 				// 如果没有设置过账户，即账户表无数据，则直接返回成功标识
-				transaction.commit()
+				await transaction.commit()
 				return {
 					errCode: 0,
 					errMsg: '已入账',
@@ -86,14 +86,14 @@ module.exports = {
 				}
 			} else {
 				// 添加收支记录失败
-				transaction.rollback()
+				await transaction.rollback()
 				return {
 					errCode: 11000,
 					errMsg: '入账失败，请稍后重试'
 				}
 			}
 		} catch (e) {
-			transaction.rollback()
+			await transaction.rollback()
 			return {
 				errCode: 11000,
 				errMsg: '入账失败，请稍后重试'
@@ -195,13 +195,13 @@ module.exports = {
 							})
 						}
 
-						transaction.commit()
+						await transaction.commit()
 						return {
 							errCode: 0,
 							errMsg: '修改成功'
 						}
 					} catch (e) {
-						transaction.rollback()
+						await transaction.rollback()
 						return {
 							errCode: 11004,
 							errMsg: '同步账户数据失败，请稍后重试'
@@ -210,20 +210,20 @@ module.exports = {
 				}
 
 				// 修改成功且无需同步账户
-				transaction.commit()
+				await transaction.commit()
 				return {
 					errCode: 0,
 					errMsg: '修改成功'
 				}
 			} else {
-				transaction.rollback()
+				await transaction.rollback()
 				return {
 					errCode: 11001,
 					errMsg: '数据没有变化呀'
 				}
 			}
 		} catch (e) {
-			transaction.rollback()
+			await transaction.rollback()
 			return {
 				errCode: 11002,
 				errMsg: '数据修改失败，请稍后重试'
@@ -270,13 +270,13 @@ module.exports = {
 							[`${account}`]: type == 2 ? accountValue : (type == 0 ? dbCmd.inc(money) : (accountValue > money ? dbCmd.inc(-money) : 0))
 						})
 
-						transaction.commit()
+						await transaction.commit()
 						return {
 							errCode: 0,
 							errMsg: '删除成功'
 						}
 					} catch (e) {
-						transaction.rollback()
+						await transaction.rollback()
 						return {
 							errCode: 11004,
 							errMsg: '同步账户数据失败，请稍后重试'
@@ -285,20 +285,20 @@ module.exports = {
 				}
 				
 				// 删除成功且无需同步账户
-				transaction.commit()
+				await transaction.commit()
 				return {
 					errCode: 0,
 					errMsg: '删除成功'
 				}
 			} else {
-				transaction.rollback()
+				await transaction.rollback()
 				return {
 					errCode: 11003,
 					errMsg: '删除失败，请稍后重试'
 				}
 			}
 		} catch (e) {
-			transaction.rollback()
+			await transaction.rollback()
 			return {
 				errCode: 11003,
 				errMsg: '删除失败，请稍后重试'
