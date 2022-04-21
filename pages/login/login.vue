@@ -16,7 +16,7 @@
 		<!-- #endif -->
 	</view>
 	<view v-if="isLogining" class="login-loading">
-		<com-loading type="circle" width="200rpx" height="200rpx"></com-loading>
+		<com-loading width="200rpx" height="100rpx"></com-loading>
 	</view>
 </template>
 
@@ -58,6 +58,7 @@
 								title: '登录成功',
 								duration: 1000,
 								success: () => {
+									this.isLogining = false
 									setTimeout(() => {
 										uni.reLaunch({
 											url: '/pages/index/index'
@@ -71,9 +72,6 @@
 					},
 					fail: () => {
 						this._loginErrorToast()
-					},
-					complete: () => {
-						this.isLogining = false
 					}
 				})
 			},
@@ -93,6 +91,7 @@
 								title: '登录成功',
 								duration: 1000,
 								success: () => {
+									this.isLogining = false
 									setTimeout(() => {
 										uni.reLaunch({
 											url: '/pages/index/index'
@@ -106,9 +105,6 @@
 					},
 					fail: () => {
 						this._loginErrorToast()
-					},
-					complete: () => {
-						this.isLogining = false
 					}
 				})
 			},
