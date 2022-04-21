@@ -9,21 +9,31 @@
 		</view>
 		<view class="operate">
 			<view class="add" @click="add">
-				<uni-icons type="plus-filled" size="26"></uni-icons>
+				<uni-icons type="plus" size="24"></uni-icons>
 				<text>添加</text>
 			</view>
 			<view class="line"></view>
+			<view class="scan" @click="scan">
+				<uni-icons type="scan" size="24"></uni-icons>
+				<text>ocr</text>
+			</view>
+			<view class="line"></view>
 			<view class="search" @click="search">
-				<uni-icons type="search" size="26"></uni-icons>
+				<uni-icons type="search" size="24"></uni-icons>
 				<text>搜索</text>
 			</view>
 		</view>
 	</view>
+	<!-- #ifdef MP-ALIPAY -->
+	<!-- <canvas style="position: absolute; top: -2000px; opacity: 0;" :style="`width: ${canvasWidth}px; height: ${canvasHeight}px;`" id="canvas"></canvas> -->
+	<!-- #endif -->
 </template>
 
 <script>
 	import Loading from '/components/loading.vue'
 	import { fixedMoney } from '/utils/money.js'
+
+	const scanObj = uniCloud.importObject('scan')
 
 	export default {
 		components: {
@@ -41,9 +51,83 @@
 				} else return '0.00'
 			}
 		},
+		// #ifdef MP-ALIPAY
+		// data () {
+		// 	return {
+		// 		canvasWidth: 100,
+		// 		canvasHeight: 100
+		// 	}
+		// },
+		// #endif
 		methods: {
 			add () {
 				this._navigate('/pages/add/add')
+			},
+			scan () {
+				// #ifdef MP-ALIPAY
+				// 支付宝小程序 ocr 扫描结果一直为空，所以暂时不支持
+				uni.showToast({
+					icon: 'none',
+					title: '支付宝小程序暂不支持 ocr 扫描'
+				})
+				return
+				// #endif
+
+				uni.chooseImage({
+					count: 1,
+					success: async res => {
+						uni.showLoading({
+							title: '图片识别中',
+							mask: true
+						})
+
+						// #ifdef MP-WEIXIN
+						// 微信端直接获取图片 base64 用于 ocr
+						const base64Img = uni.getFileSystemManager().readFileSync(res.tempFilePaths[0], 'base64')
+						// #endif
+
+						// #ifdef MP-ALIPAY
+						// 支付宝端需要用 canvas 获取图片 base64
+						// const ctx = my.createCanvasContext('canvas')
+						// const { width, height } = await my.getImageInfo({
+						// 	src: res.tempFilePaths[0]
+						// })
+						// this.canvasWidth = width
+						// this.canvasHeight = height
+						// ctx.drawImage(res.tempFilePaths[0], 0, 0, width, height)
+						// let base64Img = await ctx.toDataURL({
+						// 	width,
+						// 	height
+						// })
+						// base64Img = base64Img.replace('data:image/png;base64,', '')
+						// #endif
+
+						try {
+							const scanRes = await scanObj.imageOcr(base64Img)
+							uni.hideLoading()
+							uni.showToast({
+								icon: 'none',
+								title: '识别成功',
+								duration: 1500,
+								success: () => {
+									// ocr 识别出来的数据可能很大，url 长度有限制，所以在这里传输数据
+									getApp().globalData.ocrData = scanRes.words_result
+									setTimeout(() => {
+										uni.redirectTo({
+											url: '/pages/scan/scan'
+										})
+									}, 1500)
+								}
+							})
+						} catch (err) {
+							uni.hideLoading()
+							uni.showToast({
+								icon: 'none',
+								title: err.errMsg
+							})
+						}
+					}
+				})
 			},
 			search () {
 				this._navigate('/pages/search/search')
@@ -116,13 +200,14 @@
 			align-items: center;
 			margin-top: 10rpx;
 			.add,
+			.scan,
 			.search {
 				display: flex;
 				align-items: center;
 				vertical-align: middle;
 			}
 			.line {
-				width: 4rpx;
+				width: 2rpx;
 				height: 40rpx;
 				background-color: #e8c600;
 			}
