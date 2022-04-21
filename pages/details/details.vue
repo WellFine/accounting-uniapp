@@ -32,7 +32,7 @@
 		groupby="name" group-field="sum(money) as money, push(subname, money) as dataList"
 		@load="loadNameData"
 	>
-		<view v-if="error">{{error.message}}</view>
+		<view v-if="error" class="udb-error-message">{{error.message}}</view>
 		<view v-else class="charts-container">
 			<chart-header title="分类构成" :isLoading="loading" @type="onChangeNameType"></chart-header>
 			<view class="name-charts">
@@ -64,7 +64,7 @@
 		groupby="time" group-field="sum(money) as money, push(name, subname, money) as dataList"
 		@load="loadTimeData"
 	>
-		<view v-if="error">{{error.message}}</view>
+		<view v-if="error" class="udb-error-message">{{error.message}}</view>
 		<view v-else class="charts-container">
 			<chart-header title="每日对比" :isLoading="loading" @type="onChangeTimeType"></chart-header>
 			<view class="time-charts">

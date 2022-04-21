@@ -46,7 +46,8 @@
 			db.on('error', onDBError)
 		},
 		globalData: {
-			isLogin: false
+			isLogin: false,
+			ocrData: []
 		}
 	}
 </script>
@@ -72,11 +73,12 @@
 		input {
 			background: transparent;
 		}
-		// 支付宝小程序 button 按钮长度根据内容而变化，这里统一设置
-		// button {
-		// 	width: 100%;
-		// 	border-radius: 10rpx;
-		// }
 		/* #endif */
+		
+		.udb-error-message {
+			color: #ed6d46;
+			font-size: 24rpx;
+			text-align: center;
+		}
 	}
 </style>

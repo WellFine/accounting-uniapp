@@ -18,7 +18,7 @@
 		groupby="time" group-field="push(_id,type,name,py,subname,remark,money,account) as data"
 		@load="loadIncomeExpendData"
 	>
-		<view v-if="error">{{error.message}}</view>
+		<view v-if="error" class="udb-error-message">{{error.message}}</view>
 		<view v-else>
 			<income-expend :income="monthTotalIncome" :expend="monthTotalExpend" />
 			<list-header :loading="loading" @time="getTime" @type="getType"></list-header>
