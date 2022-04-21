@@ -323,12 +323,13 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style>
+	/* scoped 对 page 不起作用，所以会被 App.vue 中的 page 覆盖，这里单独在不加 scoped 属性的 style 中设置 */
 	page {
-		box-sizing: border-box;
 		padding: 10rpx 30rpx 20rpx;
 	}
-	
+</style>
+<style lang="scss" scoped>
 	.normal {
 		color: var(--normal-color);
 		background: var(--normal-background);
