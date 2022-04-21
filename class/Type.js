@@ -10,7 +10,7 @@ class Type {
 }
 
 class Food extends Type {
-  subname = ['早餐', '午饭', '下午茶', '晚餐', '夜宵', '饮品', '甜品', '其它']
+  subname = ['早餐', '午饭', '下午茶', '晚餐', '夜宵', '饮品', '甜品', '糕点', '其它']
 
   constructor () {
     super('餐饮', 'canyin')
@@ -26,7 +26,7 @@ class Vehicle extends Type {
 }
 
 class Shopping extends Type {
-  subname = ['日用品', '食材', '水果', '零食', '饮料', '电子产品', '娱乐产品', '其它']
+  subname = ['日用品', '买菜', '吃的', '水果', '零食', '饮料', '电子产品', '娱乐产品', '其它']
 
   constructor () {
     super('购物', 'gouwu')
@@ -121,6 +121,14 @@ class Insurance extends Type {
   }
 }
 
+class Fix extends Type {
+	subname = ['修车', '修手机', '修电器', '修家具', '其它']
+	
+	constructor () {
+		super('修理', 'xiuli')
+	}
+}
+
 export {
   Type,
   Food,
@@ -136,5 +144,6 @@ export {
   Pet,
   Medical,
   HumanFeelings,
-  Insurance
+  Insurance,
+	Fix
 }
