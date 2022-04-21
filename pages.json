@@ -5,12 +5,45 @@
 			"navigationBarTitleText": "收支"
 		}
 	}, {
+		"path": "pages/search/search",
+		"style": {
+			"navigationBarTitleText": "搜索",
+			"enablePullDownRefresh": false,
+			"navigationBarBackgroundColor": "#f9fafe"
+		}
+	}, {
 		"path": "pages/details/details",
 		"style": {
 			"navigationBarTitleText": "明细"
 		}
+	}, {
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "登录页",
+			"enablePullDownRefresh": false
+		}
+	}, {
+		"path": "pages/add/add",
+		"style": {
+			"navigationBarTitleText": "记账",
+			"enablePullDownRefresh": false
+		}			
+	}, {
+		"path": "pages/account/account",
+		"style": {
+			"navigationBarTitleText": "账户余额",
+			"enablePullDownRefresh": false
+		}
+	}, {
+		"path": "pages/scan/scan",
+		"style": {
+			"navigationBarTitleText": "ocr 记账",
+			"enablePullDownRefresh": false
+		}
 	}],
 	"tabBar": {
+		"color": "#36cfc9",
+		"selectedColor": "#40a9ff",
 		"list": [{
 			"pagePath": "pages/index/index",
 			"text": "收支",
