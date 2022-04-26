@@ -90,6 +90,41 @@
 			</uni-transition>
 		</view>
 	</unicloud-db>
+	<unicloud-db
+		v-slot:default="{ data, loading, error }" collection="income-expend" :page-size="16"
+		:where="`uid==$cloudEnv_uid&&time>=${beginTime}&&time<${endTime}&&type==${rankingType}`" orderby="money desc"
+	>
+		<view v-if="error" class="udb-error-message">{{error.message}}</view>
+		<view v-else class="ranking-container">
+			<chart-header title="月排行榜" :isLoading="loading" @type="onChangeRankingType"></chart-header>
+			<view class="ranking-details">
+				<view v-if="loading" class="loading">
+					<com-loading></com-loading>
+				</view>
+				<view v-else-if="data.length > 0" class="ranking-list">
+					<template v-for="(item, index) in data" :key="item._id">
+						<!-- udb 加载最多 16 条数据，这里显示到第 15 条，如果有第 16 条数据则显示全部排行链接 -->
+						<view v-if="index < 15" class="ranking-item" @click="onClickRankingItem(item)">
+							<text class="index">{{ index + 1 }}</text>
+							<type-icon :type="item.py"></type-icon>
+							<view class="info">
+								<view class="top">
+									<view class="type">{{ item.name + (item.subname ? ` - ${item.subname}` : '') }}</view>
+									<view class="money">{{ (item.type === 0 ? '-' : (item.type === 1 ? '+' : '')) + fixedMoney(item.money) }}</view>
+								</view>
+								<view class="bottom">
+									<view class="remark">{{ item.remark }}</view>
+									<view class="time">{{ parseTime(item.time) }}</view>
+								</view>
+							</view>
+						</view>
+					</template>
+					<view v-if="data.length > 15" class="show-more" @click="goToRankingPage">全部排行 ></view>
+				</view>
+				<view v-else class="no-data">本月没有{{rankingType === 0 ? '支出' : (rankingType === 1 ? '收入' : '不计入收支')}}数据</view>
+			</view>
+		</view>
+	</unicloud-db>
 </template>
 
 <script>
@@ -99,12 +134,14 @@
 	import ComLoading from '/components/loading.vue'
 	import ChartHeader from './chart-header.vue'
 	import UdbError from '/components/udb-error.vue'
+	import TypeIcon from '/components/type-icon.vue'
 
 	export default {
 		components: {
 			ComLoading,
 			ChartHeader,
-			UdbError
+			UdbError,
+			TypeIcon
 		},
 		setup () {
 			const { year, monthStr, dayStr } = getYMDTime()
@@ -231,6 +268,7 @@
 				isShowSubnameChart.value = true
 			}
 
+			// 每日对比类型
 			const timeType = ref(0)
 			const onChangeTimeType = type => {
 				timeType.value = type
@@ -300,6 +338,27 @@
 				isShowTimeDetailsChart.value = true
 			}
 
+			const rankingType = ref(0)
+			const onChangeRankingType = type => {
+				rankingType.value = type
+			}
+			const parseTime = time => {
+				const nowYear = getYMDTime().year
+				const { year, monthStr, dayStr } = getYMDTime(new Date(time))
+				return year < nowYear ? `${year}年${monthStr}月${dayStr}日` : `${monthStr}月${dayStr}日`
+			}
+			const onClickRankingItem = item => {
+				uni.navigateTo({
+					url: `/pages/add/add?data=${JSON.stringify(item)}&&time=${item.time}`
+				})
+			}
+			const goToRankingPage = () => {
+				uni.showToast({
+					icon: 'none',
+					title: '开发中'
+				})
+			}
+
 			return {
 				date,
 				dateStr,
@@ -327,7 +386,13 @@
 				timeDetailsPieOpts,
 				isShowTimeDetailsChart,
 				timeDetailsChartData,
-				onClickTimeColumn
+				onClickTimeColumn,
+				rankingType,
+				onChangeRankingType,
+				parseTime,
+				fixedMoney,
+				onClickRankingItem,
+				goToRankingPage
 			}
 		}
 	}
@@ -396,6 +461,70 @@
 		.subname-charts, .time-details-charts {
 			width: 100%;
 			height: 600rpx;
+		}
+	}
+
+	.ranking-container {
+		.ranking-details {
+			.loading {
+				margin-top: 50rpx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.no-data {
+				text-align: center;
+				line-height: 300rpx;
+			}
+			.ranking-list {
+				.ranking-item {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					margin-bottom: 20rpx;
+					.index {
+						color: var(--normal-color);
+						width: 50rpx;
+						text-align: center;
+						margin-right: 20rpx;
+					}
+					.info {
+						flex: 1;
+						margin-left: 30rpx;
+						.top, .bottom {
+							display: flex;
+							justify-content: space-between;
+						}
+						.top {
+							font-size: 30rpx;
+							margin-bottom: 6rpx;
+							.money {
+								font-weight: 500;
+							}
+						}
+						.bottom {
+							font-size: 22rpx;
+							color: var(--normal-color);
+							.remark {
+								margin-right: 10rpx;
+								display: -webkit-box;
+								-webkit-box-orient: vertical;
+								-webkit-line-clamp: 2;
+								overflow: hidden;
+								text-overflow: ellipsis;
+							}
+							.time {
+								white-space: nowrap;
+							}
+						}
+					}
+				}
+				.show-more {
+					text-align: center;
+					font-size: 24rpx;
+					color: var(--expend-color);
+				}
+			}
 		}
 	}
 </style>
