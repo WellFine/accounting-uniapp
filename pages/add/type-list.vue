@@ -63,7 +63,9 @@
 		},
 		watch: {
 			computedIndex (val) {
-				this.activeIndex = val
+				this.$nextTick(() => {
+					this.activeIndex = val
+				})
 			},
 			// 页面切换 type 时重置下标
 			type () {
