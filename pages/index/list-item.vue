@@ -96,8 +96,6 @@
 			justify-content: space-between;
 			align-items: center;
 			background: #f9f9f9;
-			// border-top-left-radius: 20rpx;
-			// border-top-right-radius: 20rpx;
 			
 			.income-expend {
 				display: flex;
@@ -139,9 +137,11 @@
 						margin-left: 20rpx;
 						.remark {
 							max-width: 300rpx;
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 2;
 							overflow: hidden;
 							text-overflow: ellipsis;
-							white-space: nowrap;
 							font-size: 26rpx;
 							color: var(--normal-color);
 						}
