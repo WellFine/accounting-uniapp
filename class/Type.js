@@ -26,7 +26,7 @@ class Vehicle extends Type {
 }
 
 class Shopping extends Type {
-  subname = ['日用品', '买菜', '吃的', '水果', '零食', '饮料', '电子产品', '娱乐产品', '其它']
+  subname = ['日用品', '买菜', '吃的', '水果', '零食', '饮料', '鲜花', '礼物', '电子产品', '娱乐产品', '其它']
 
   constructor () {
     super('购物', 'gouwu')
