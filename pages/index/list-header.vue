@@ -117,5 +117,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		position: sticky;
+		top: 20rpx;
+		background: #fff;
 	}
 </style>
