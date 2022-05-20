@@ -37,7 +37,7 @@
 
 <script>
 	import Loading from '/components/loading.vue'
-	import { makeMoneyTrue } from '/utils/money.js'
+	import { makeMoneyTrue, fixedMoney } from '/utils/money.js'
 	
 	const account = uniCloud.importObject('account')
 
@@ -61,11 +61,11 @@
 				if (data.length > 0) {
 					const { wechat, alipay, bank, cash, canUseMoney } = data[0]
 					this.method = 'update'
-					this.wechat = wechat / 100
-					this.alipay = alipay / 100
-					this.bank = bank / 100
-					this.cash = cash / 100
-					this.canUseMoney = canUseMoney / 100
+					this.wechat = fixedMoney(wechat)
+					this.alipay = fixedMoney(alipay)
+					this.bank = fixedMoney(bank)
+					this.cash = fixedMoney(cash)
+					this.canUseMoney = fixedMoney(canUseMoney)
 				}
 			},
 			onInput (e) {
