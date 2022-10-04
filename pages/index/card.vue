@@ -138,25 +138,6 @@
 				})
 			},
 			_navigate (url) {
-				// #ifdef MP-WEIXIN
-				const { isLogin } = getApp().globalData
-				if (!isLogin) {
-					uni.showToast({
-						icon: 'none',
-						title: '请先登录',
-						duration: 1000,
-						success: () => {
-							setTimeout(() => {
-								uni.navigateTo({
-									url: '/pages/login/login'
-								})
-							}, 1000)
-						}
-					})
-					return
-				}
-				// #endif
-
 				uni.navigateTo({
 					url
 				})

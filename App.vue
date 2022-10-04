@@ -3,22 +3,6 @@
 
 	export default {
 		onLaunch: async function () {
-			// #ifdef MP-WEIXIN
-			uni.checkSession({
-				success: () => {
-					this.globalData.isLogin = true
-				},
-				fail: () => {
-					this.globalData.isLogin = false
-					uni.showToast({
-						icon: "none",
-						title: '登录后体验更多功能',
-						duration: 2000
-					})
-				}
-			})
-			// #endif
-
 			// 全局处理 clientDB（unicloud-db 组件）发送请求时回传的 token 与错误事件
 			const refreshToken = ({ token, tokenExpired }) => {
 				// clientDB 发送请求后回传的 token 直接存入缓存中
@@ -27,26 +11,29 @@
 			}
 			const onDBError = ({ code, message }) => {
 				// clientDB 发送请求出错，这里判断如果是 token 过期就跳登录页
-				if (code === 'TOKEN_INVALID_TOKEN_EXPIRED') {
-					uni.showToast({
-						icon: 'none',
-						title: '登录过期，请重新登录',
-						duration: 1000,
-						success: () => {
-							setTimeout(() => {
-								uni.reLaunch({
-									url: '/pages/login/login'
-								})
-							}, 1000)
-						}
-					})
-				}
+				let title = message
+				
+				if (code === 'TOKEN_INVALID_TOKEN_EXPIRED')  title = '登录过期，请重新登录'
+				else if (code === 'TOKEN_INVALID_ANONYMOUS_USER') title = '用户未登录，登录体验所有功能'
+				else if (code === 'TOKEN_INVALID_WRONG_TOKEN') title = '登录信息出错，请重新登录'
+
+				uni.showToast({
+					icon: 'none',
+					title,
+					duration: 1000,
+					success: () => {
+						setTimeout(() => {
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+						}, 1500)
+					}
+				})
 			}
 			db.on('refreshToken', refreshToken)
 			db.on('error', onDBError)
 		},
 		globalData: {
-			isLogin: false,
 			ocrData: []
 		}
 	}
