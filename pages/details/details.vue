@@ -91,7 +91,7 @@
 		</view>
 	</unicloud-db>
 	<unicloud-db
-		v-slot:default="{ data, loading, error }" collection="income-expend" :page-size="16"
+		v-slot:default="{ data, loading, error }" collection="income-expend" :page-size="31"
 		:where="`uid==$cloudEnv_uid&&time>=${beginTime}&&time<${endTime}&&type==${rankingType}`" orderby="money desc"
 	>
 		<view v-if="error" class="udb-error-message">{{error.message}}</view>
@@ -103,8 +103,8 @@
 				</view>
 				<view v-else-if="data.length > 0" class="ranking-list">
 					<template v-for="(item, index) in data" :key="item._id">
-						<!-- udb 加载最多 16 条数据，这里显示到第 15 条，如果有第 16 条数据则显示全部排行链接 -->
-						<view v-if="index < 15" class="ranking-item" @click="onClickRankingItem(item)">
+						<!-- udb 加载最多 31 条数据，这里显示到第 30 条，如果有第 31 条数据则显示全部排行链接 -->
+						<view v-if="index < 31" class="ranking-item" @click="onClickRankingItem(item)">
 							<text class="index">{{ index + 1 }}</text>
 							<type-icon :type="item.py"></type-icon>
 							<view class="info">
@@ -119,7 +119,8 @@
 							</view>
 						</view>
 					</template>
-					<view v-if="data.length > 15" class="show-more" @click="goToRankingPage">全部排行 ></view>
+					<!-- 如果有大于 30 条数据，则显示全部排行链接 -->
+					<view v-if="data.length > 30" class="show-more" @click="goToRankingPage">全部排行 ></view>
 				</view>
 				<view v-else class="no-data">本月没有{{rankingType === 0 ? '支出' : (rankingType === 1 ? '收入' : '不计入收支')}}数据</view>
 			</view>
