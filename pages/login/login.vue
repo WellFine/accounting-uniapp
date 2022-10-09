@@ -36,6 +36,7 @@
 		},
 		methods: {
 			_loginErrorToast (title = '') {
+				this.isLogining = false
 				uni.showToast({
 					icon: 'none',
 					title: title || '登录失败，请稍后重试',
@@ -49,25 +50,29 @@
 					onlyAuthorize: true,
 					success: async res => {
 						const { code } = res
-						const { token, tokenExpired } = await login.loginByWeixin(code)
-						if (token) {
-							uni.setStorageSync('uni_id_token', token)
-							uni.setStorageSync('uni_id_token_expired', tokenExpired)
-							uni.showToast({
-								icon: 'none',
-								title: '登录成功',
-								duration: 1000,
-								success: () => {
-									this.isLogining = false
-									setTimeout(() => {
-										uni.reLaunch({
-											url: '/pages/index/index'
-										})
-									}, 1000)
-								}
-							})
-						} else {
-							this._loginErrorToast()
+						try {							
+							const { token, tokenExpired } = await login.loginByWeixin(code)
+							if (token) {
+								uni.setStorageSync('uni_id_token', token)
+								uni.setStorageSync('uni_id_token_expired', tokenExpired)
+								uni.showToast({
+									icon: 'none',
+									title: '登录成功',
+									duration: 1000,
+									success: () => {
+										this.isLogining = false
+										setTimeout(() => {
+											uni.reLaunch({
+												url: '/pages/index/index'
+											})
+										}, 1000)
+									}
+								})
+							} else {
+								this._loginErrorToast()
+							}
+						} catch (err) {
+							this._loginErrorToast(`登录出错：${err.message}`)
 						}
 					},
 					fail: () => {
