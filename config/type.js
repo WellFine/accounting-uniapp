@@ -1,4 +1,4 @@
-import { Type, Food, Invest, Vehicle, Shopping, Pay, Entertainment, Sport, Pet, HumanFeelings, Insurance, Daily, Medical, Apparel, Educate, Fix } from '/class/Type'
+import { Type, Food, Invest, Vehicle, Shopping, Pay, Entertainment, Sport, Pet, HumanFeelings, Insurance, Daily, Medical, Apparel, Educate, Fix, Travel } from '/class/Type'
 
 const qita = new Type('其它', 'qita')
 
@@ -58,7 +58,7 @@ const baoxian = new Insurance
 
 const xiuli = new Fix
 
-const lvxing = new Type('旅行', 'lvxing')
+const lvxing = new Travel
 
 const huankuan = new Type('还款', 'kuan')
 

@@ -10,7 +10,7 @@ class Type {
 }
 
 class Food extends Type {
-  subname = ['早餐', '午饭', '下午茶', '晚餐', '夜宵', '饮品', '甜品', '糕点', '其它']
+  subname = ['早餐', '午饭', '下午茶', '晚餐', '夜宵', '饮品', '甜品', '糕点', '买菜', '其它']
 
   constructor () {
     super('餐饮', 'canyin')
@@ -26,7 +26,7 @@ class Vehicle extends Type {
 }
 
 class Shopping extends Type {
-  subname = ['日用品', '买菜', '吃的', '水果', '零食', '饮料', '鲜花', '礼物', '电子产品', '娱乐产品', '其它']
+  subname = ['日用品', '吃的', '水果', '零食', '饮料', '鲜花', '礼物', '电子产品', '娱乐产品', '其它']
 
   constructor () {
     super('购物', 'gouwu')
@@ -58,7 +58,7 @@ class Pay extends Type {
 }
 
 class Daily extends Type {
-  subname = ['快递', '理发', '会员', '买优惠券', '其它']
+  subname = ['快递', '理发', '会员', '买优惠券', '照相', '打印', '其它']
 
   constructor () {
     super('日常', 'richang')
@@ -66,7 +66,7 @@ class Daily extends Type {
 }
 
 class Entertainment extends Type {
-  subname = ['体育', '电影', '游乐场', 'KTV', '茶室', '酒吧', '网吧', '其它']
+  subname = ['电影', '游乐场', 'KTV', '茶室', '酒吧', '网吧', '其它']
 
   constructor () {
     super('娱乐', 'yule')
@@ -74,7 +74,7 @@ class Entertainment extends Type {
 }
 
 class Sport extends Type {
-  subname = ['健身', '运动装备', '水', '其它']
+  subname = ['健身', '运动装备', '水', '篮球', '足球', '游泳', '羽毛球', '兵乓球', '桌球', '攀岩', '其它']
 
   constructor () {
     super('运动', 'yundon')
@@ -98,7 +98,7 @@ class Pet extends Type {
 }
 
 class Medical extends Type {
-  subname = ['就医', '拿药', '换药', '挂号', '其它']
+  subname = ['就医', '拿药', '换药', '挂号', '体检', '其它']
 
   constructor () {
     super('医疗', 'yiliao')
@@ -129,6 +129,14 @@ class Fix extends Type {
 	}
 }
 
+class Travel extends Type {
+	subname = ['路费', '住宿费', '伙食费', '纪念品', '其它']
+	
+	constructor () {
+		super('旅行', 'lvxing')
+	}
+}
+
 export {
   Type,
   Food,
@@ -145,5 +153,6 @@ export {
   Medical,
   HumanFeelings,
   Insurance,
-	Fix
+	Fix,
+	Travel
 }
